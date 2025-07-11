@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meble Francis</title>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+        (function(){
+            emailjs.init('yZ2vMp18LZHUdE2DT');
+        })();
+    </script>
+    <style>
+        /* GŁÓWNY, POŁĄCZONY BLOK STYLÓW */
+
+        /* --- Style ogólne strony --- */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: url('Trippi troppi.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #f0f0f0;
+        }
+
+        header {
+            background-color: rgba(44, 62, 80, 0.7); /* Mniejsza przezroczystość */
+            color: white;
+            padding: 1em 2em;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        header .logo {
+        height: 50px; /* lub np. 40px – dopasuj do wyglądu */
+        width: auto;
+}
+
+        nav {
+            margin-top: 0.5em;
+        }
+
+        nav a {
+            color: white;
+            margin-right: 1.5em;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        section {
+            padding: 2em;
+            background-color: rgba(0, 0, 0, 0.6); /* Mniejsza przezroczystość */
+            margin: 2em;
+            border-radius: 8px;
+        }
+
+        section h2 {
+            text-align: center;
+            color: #ecf0f1;
+            margin-top: 0;
+            margin-bottom: 1.5em;
+            font-size: 2em;
+        }
+        
+        footer {
+            background-color: rgba(0, 0, 0, 0.7); /* Mniejsza przezroczystość */
+            padding: 2em;
+            color: #f0f0f0;
+            text-align: center;
+        }
+        
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 1em;
+            text-align: left;
+        }
+
+        input, select, textarea {
+            padding: 0.5em;
+            font-size: 1em;
+            margin-top: 0.5em;
+            border: none;
+            border-radius: 4px;
+            background-color: #333;
+            color: #f0f0f0;
+        }
+
+        button {
+            margin-top: 1.5em;
+            padding: 0.75em;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            font-size: 1em;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #34495e;
+        }
+
+        .kontakt-stopka {
+            margin-top: 2em;
+            font-size: 0.9em;
+        }
+
+        .kontakt-stopka a {
+            color: #f0f0f0;
+            text-decoration: none;
+            margin: 0 0.5em;
+        }
+
+        .kontakt-stopka a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Style dla gry memory --- */
+        #gra {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            perspective: 1000px;
+        }
+
+        .card {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+            border: 2px solid white; /* NOWA biała ramka */
+            border-radius: 10px;      /* Zaokrąglenie dla ramki */
+        }
+
+        .card.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .card-face--front {
+            background-color: #3498db;
+        }
+
+        .card-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .card-face--back {
+            transform: rotateY(180deg);
+        }
+        
+        #reset-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #e74c3c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #reset-button:hover {
+            background-color: #c0392b;
+        }
+
+        .parallax-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 150%; /* większa wysokość niż okno */
+        background: url('Trippi troppi.jpg') no-repeat center center;
+        background-size: cover;
+        transform: translateY(0);
+        z-index: -1;
+        filter: blur(10px); /* lekki defocus */
+        scale: 1.1; /* delikatne powiększenie */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="parallax-bg"></div>
+    <!--
+    <header>
+        
+        <img src="rewers.png" alt="Logo Meble Francis" class="logo">
+        <nav>
+            <a href="#galeria">Galeria</a>
+            <a href="#kontakt">Kontakt</a>
+            <a href="#gra">Minigra</a>
+        </nav>
+    </header>
+
+    <section id="galeria">
+        <h2>Galeria</h2>
+    </section>
+    -->
+
+    <main>
+        <section id="gra">
+            <h2>Minigra</h2>
+            <div id="game-board"></div>
+            <button id="reset-button">Zagraj od nowa</button>
+        </section>
+    </main>
+
+    <!--    
+    <footer id="kontakt">
+        <h2>Zapraszam do kontaktu</h2>
+        <form id="kontaktForm">
+            <label for="email">Adres e-mail:</label>
+            <input type="email" id="email" name="user_email" required>
+
+            <label for="telefon">Numer telefonu:</label>
+            <input type="tel" id="telefon" name="telefon" required>
+
+            <label for="wiadomosc">Treść wiadomości:</label>
+            <textarea id="wiadomosc" name="message" rows="5" required></textarea>
+
+            <input type="hidden" id="to_email" name="to_email">
+            <input type="hidden" id="full_message" name="full_message">
+
+            <button type="submit">Wyślij</button>
+        </form>
+
+        <div class="kontakt-stopka">
+            <p>📧 <a href="mailto:szymon.witusiak@gmail.com">szymon.witusiak@gmail.com</a> | ☎️ <a href="tel:+486694495519">+48 669 449 551</a>
+            📷 <a href="https://www.instagram.com/meblefrancis" target="_blank">Instagram</a></p>
+        </div>
+    </footer>
+    -->
+
+    <script>
+        document.getElementById('kontaktForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const telefon = document.getElementById('telefon').value;
+            const wiadomosc = document.getElementById('wiadomosc').value;
+
+            document.getElementById('to_email').value = email;
+            document.getElementById('full_message').value = `Email: ${email}\nTelefon: ${telefon}\n\nWiadomość:\n${wiadomosc}`;
+
+            emailjs.sendForm('service_yzxhses', 'template_5f30zkn', this)
+                .then(function () {
+                    alert('Dziękujemy za wiadomość! Sprawdź swoją skrzynkę.');
+                }, function (error) {
+                    alert('Wystąpił błąd podczas wysyłania wiadomości: ' + JSON.stringify(error));
+                });
+
+            this.reset();
+        });
+    </script>
+    <script>
+        // Skrypt JS do gry memory
+        document.addEventListener('DOMContentLoaded', () => {
+            const gameBoard = document.getElementById('game-board');
+            const resetButton = document.getElementById('reset-button');
+            const imageCount = 8; 
+            let cardImages = [];
+
+            for (let i = 1; i <= imageCount; i++) {
+                cardImages.push(`obraz${i}.jpg`);
+                cardImages.push(`obraz${i}.jpg`);
+            }
+            
+            let flippedCards = [];
+            let lockBoard = false;
+            let matchedPairs = 0;
+            let moves = 0; // ZMIANA: Zmienna do liczenia ruchów
+
+            function shuffle(array) {
+                array.sort(() => Math.random() - 0.2);
+            }
+
+            function createBoard() {
+                gameBoard.innerHTML = '';
+                shuffle(cardImages);
+                flippedCards = [];
+                lockBoard = false;
+                matchedPairs = 0;
+                moves = 0; // ZMIANA: Resetowanie licznika ruchów
+
+                cardImages.forEach(imageSrc => {
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+                    card.dataset.image = imageSrc;
+
+                    card.innerHTML = `
+                        <div class="card-face card-face--front">
+                            <img src="rewers.jpg" alt="Rewers">
+                        </div>
+                        <div class="card-face card-face--back">
+                            <img src="${imageSrc}" alt="Obrazek karty">
+                        </div>
+                    `;
+
+                    card.addEventListener('click', flipCard);
+                    gameBoard.appendChild(card);
+                });
+            }
+
+            function flipCard() {
+                if (lockBoard) return;
+                if (this === flippedCards[0]) return;
+
+                this.classList.add('is-flipped');
+                
+                flippedCards.push(this);
+
+                if (flippedCards.length === 2) {
+                    checkForMatch();
+                }
+            }
+
+            function checkForMatch() {
+                lockBoard = true;
+                moves++; // ZMIANA: Zwiększenie licznika ruchów
+                const [cardOne, cardTwo] = flippedCards;
+                const isMatch = cardOne.dataset.image === cardTwo.dataset.image;
+
+                isMatch ? disableCards() : unflipCards();
+            }
+
+            function disableCards() {
+                const [cardOne, cardTwo] = flippedCards;
+                cardOne.removeEventListener('click', flipCard);
+                cardTwo.removeEventListener('click', flipCard);
+                
+                matchedPairs++;
+                resetBoardState();
+                
+                if (matchedPairs === imageCount) {
+                    setTimeout(() => {
+                        // ZMIANA: Alert z liczbą ruchów
+                        alert('Gratulacje! Wygrałeś/aś w ' + moves + ' ruchach!');
+                    }, 500);
+                }
+            }
+
+            function unflipCards() {
+                setTimeout(() => {
+                    flippedCards.forEach(card => card.classList.remove('is-flipped'));
+                    resetBoardState();
+                }, 800);
+            }
+
+            function resetBoardState() {
+                flippedCards = [];
+                lockBoard = false;
+            }
+            
+            resetButton.addEventListener('click', createBoard);
+            
+            if (gameBoard) {
+                createBoard();
+            }
+        });
+    </script>
+    <script>
+        window.addEventListener('scroll', () => {
+            const scroll = window.scrollY;
+            const bg = document.querySelector('.parallax-bg');
+            bg.style.transform = `translateY(${scroll * -0.2}px)`;
+        });
+    </script>
+</body>
+</html>
